@@ -117,7 +117,10 @@ func Highlight_Areas(Flow):
 	for area in Areas:
 		var square = Flow.get_node(area)
 		if square:
-			square.modulate = Color(0, 1, 0)  # Cambiar a verde (o cualquier color que desees)
+			# Solo permite resaltar si está vacío o tiene una ficha enemiga
+			if square.get_child_count() == 0 or (square.get_child_count() == 1 and square.get_child(0).Item_Color != Turn):
+				square.modulate = Color(0, 1, 0)  # Cambiar a verde (o cualquier color que desees)
+
 
 	# No permitir que las áreas donde ya hay fichas aliadas aparezcan
 	var new_areas = PackedStringArray()  # Crear un nuevo array
