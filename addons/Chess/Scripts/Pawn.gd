@@ -23,4 +23,3 @@ func _process(_delta):
 			self.texture = load("res://addons/Chess/Textures/WPawn.svg")
 		elif Item_Color == 1:
 			self.texture = load("res://addons/Chess/Textures/BPawn.svg")
-

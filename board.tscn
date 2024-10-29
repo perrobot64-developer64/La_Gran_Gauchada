@@ -6,8 +6,10 @@
 [node name="Board" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 432.0
+offset_top = 146.0
+offset_right = 432.0
+offset_bottom = 146.0
 script = ExtResource("1_f1l42")
 
 [node name="Flow" type="FlowContainer" parent="."]

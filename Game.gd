@@ -2,13 +2,10 @@ extends Control
 
 var Selected_Node = ""
 var Turn = 0
-
 var Location_X = ""
 var Location_Y = ""
-
 var pos = Vector2(25, 25)
 var Areas: PackedStringArray
-# this is seperate the Areas for special circumstances, like castling.
 var Special_Area: PackedStringArray
 
 func _on_flow_send_location(location: String):
@@ -21,8 +18,8 @@ func _on_flow_send_location(location: String):
 		Location_X += location.substr(number, 1)
 		number += 1
 	Location_Y = location.substr(number + 1)
-	# Now... we need to figure out how to select the pieces. If there is a valid move, do stuff.
-	# If we re-select, just go to that other piece
+	
+	# Si no hay ficha seleccionada, selecciona la ficha si es del turno actual
 	if Selected_Node == "" && node.get_child_count() != 0 && node.get_child(0).Item_Color == Turn:
 		Selected_Node = location
 		Get_Moveable_Areas()
@@ -32,12 +29,10 @@ func _on_flow_send_location(location: String):
 			if i == node.name:
 				var king = get_node("Flow/" + Selected_Node).get_child(0)
 				var rook = node.get_child(0)
-				# Using a seperate array because Areas wouldn't be really consistant...
 				king.reparent(get_node("Flow/" + Special_Area[1]))
 				rook.reparent(get_node("Flow/" + Special_Area[0]))
 				king.position = pos
 				rook.position = pos
-				# We have to get the parent because it will break lmao.
 				Update_Game(king.get_parent())
 	# En Passant
 	elif Selected_Node != "" && node.get_child_count() != 0 && node.get_child(0).Item_Color != Turn && node.get_child(0).name == "Pawn" && Special_Area.size() != 0 && Special_Area[0] == node.name && node.get_child(0).get("En_Passant") == true:
@@ -73,37 +68,25 @@ func _on_flow_send_location(location: String):
 				Piece.position = pos
 				Update_Game(node)
 
-func Update_Game(node):
-	Selected_Node = ""
-	if Turn == 0:
-		Turn = 1
-	else:
-		Turn = 0
-	
-	# get the en-passantable pieces and undo them
-	var things = get_node("Flow").get_children()
-	for i in things:
-		if i.get_child_count() != 0 && i.get_child(0).name == "Pawn" && i.get_child(0).Item_Color == Turn && i.get_child(0).En_Passant == true:
-			i.get_child(0).set("En_Passant", false)
-	
-	# Remove the abilities once they are either used or not used
-	if node.get_child(0).name == "Pawn":
-		if node.get_child(0).Double_Start == true:
-			node.get_child(0).En_Passant = true
-		node.get_child(0).Double_Start = false
-	if node.get_child(0).name == "King":
-		node.get_child(0).Castling = false
-	if node.get_child(0).name == "Rook":
-		node.get_child(0).Castling = false
 
-# Below is the movement that is used for the pieces
+@warning_ignore("unused_parameter")
+func Update_Game(node):
+	# Restablecer el nodo seleccionado
+	Selected_Node = ""
+	# Cambiar el turno
+	Turn = (Turn + 1) % 2
+	# Limpiar la visualización de áreas
+	Clear_Areas(get_node("Flow"))  # Llama a la función para limpiar completamente las áreas
+	Areas.clear()  # Limpiar las áreas movibles
+	Special_Area.clear()  # Limpiar áreas especiales si existen
+
 func Get_Moveable_Areas():
 	var Flow = get_node("Flow")
-	# Clearing the arrays
 	Areas.clear()
 	Special_Area.clear()
 	var Piece = get_node("Flow/" + Selected_Node).get_child(0)
-	# For the selected piece that we have, we can get the movement that we need here.
+	
+	# Obtener áreas movibles según el tipo de pieza
 	if Piece.name == "Pawn":
 		Get_Pawn(Piece, Flow)
 	elif Piece.name == "Bishop":
@@ -117,6 +100,43 @@ func Get_Moveable_Areas():
 		Get_Rows(Flow)
 	elif Piece.name == "Knight":
 		Get_Horse()
+
+	# Cambiar el color de las casillas disponibles
+	Highlight_Areas(Flow)
+
+func Clear_Areas(Flow):
+	# Reiniciar colores de todas las casillas
+	for child in Flow.get_children():
+		child.modulate = Color(1, 1, 1)  # Color original (blanco)
+
+func Highlight_Areas(Flow):
+	# Reiniciar colores de todas las casillas
+	Clear_Areas(Flow)
+
+	# Cambiar color de las áreas seleccionadas
+	for area in Areas:
+		var square = Flow.get_node(area)
+		if square:
+			square.modulate = Color(0, 1, 0)  # Cambiar a verde (o cualquier color que desees)
+
+	# No permitir que las áreas donde ya hay fichas aliadas aparezcan
+	var new_areas = PackedStringArray()  # Crear un nuevo array
+
+	for area in Areas:
+		var can_add = true  # Suponemos que podemos agregar el área
+		for child in Flow.get_children():
+			if child.get_child_count() != 0 and child.get_child(0).Item_Color == Turn:
+				if child.name == area:
+					can_add = false  # No agregamos el área si hay ficha aliada
+					break
+		if can_add:
+			new_areas.append(area)  # Solo agregamos si no hay ficha aliada
+
+	Areas = new_areas  # Reemplazamos Areas con el nuevo array
+
+
+
+
 
 func Get_Pawn(Piece, Flow):
 	# This is for going from the bottom to the top, also known as the white pawns.
