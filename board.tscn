@@ -16,4 +16,18 @@ script = ExtResource("1_f1l42")
 layout_mode = 0
 script = ExtResource("1_ckrtr")
 
+[node name="CapturedWhite" type="Control" parent="."]
+anchors_preset = 0
+offset_left = -277.0
+offset_top = -17.0
+offset_right = 57.0
+offset_bottom = 310.0
+
+[node name="CapturedBlack" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 489.0
+offset_top = -20.0
+offset_right = 834.0
+offset_bottom = 247.0
+
 [connection signal="send_location" from="Flow" to="." method="_on_flow_send_location"]

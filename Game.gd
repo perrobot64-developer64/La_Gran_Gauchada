@@ -8,23 +8,25 @@ var pos = Vector2(25, 25)
 var Areas: PackedStringArray
 var Special_Area: PackedStringArray
 
+# Nuevas variables para almacenar las fichas capturadas
+var captured_white_pieces = []  # Lista de fichas blancas capturadas
+var captured_black_pieces = []  # Lista de fichas negras capturadas
+
 func _on_flow_send_location(location: String):
-	# variables for later
 	var number = 0
 	Location_X = ""
 	var node = get_node("Flow/" + location)
-	# This is to try and grab the X and Y coordinates from the board
+	
 	while location.substr(number, 1) != "-":
 		Location_X += location.substr(number, 1)
 		number += 1
 	Location_Y = location.substr(number + 1)
 	
-	# Si no hay ficha seleccionada, selecciona la ficha si es del turno actual
-	if Selected_Node == "" && node.get_child_count() != 0 && node.get_child(0).Item_Color == Turn:
+	if Selected_Node == "" and node.get_child_count() != 0 and node.get_child(0).Item_Color == Turn:
 		Selected_Node = location
 		Get_Moveable_Areas()
-	elif Selected_Node != "" && node.get_child_count() != 0 && node.get_child(0).Item_Color == Turn && node.get_child(0).name == "Rook":
-		# Castling
+	elif Selected_Node != "" and node.get_child_count() != 0 and node.get_child(0).Item_Color == Turn and node.get_child(0).name == "Rook":
+		# Enroque
 		for i in Areas:
 			if i == node.name:
 				var king = get_node("Flow/" + Selected_Node).get_child(0)
@@ -35,7 +37,7 @@ func _on_flow_send_location(location: String):
 				rook.position = pos
 				Update_Game(king.get_parent())
 	# En Passant
-	elif Selected_Node != "" && node.get_child_count() != 0 && node.get_child(0).Item_Color != Turn && node.get_child(0).name == "Pawn" && Special_Area.size() != 0 && Special_Area[0] == node.name && node.get_child(0).get("En_Passant") == true:
+	elif Selected_Node != "" and node.get_child_count() != 0 and node.get_child(0).Item_Color != Turn and node.get_child(0).name == "Pawn" and Special_Area.size() != 0 and Special_Area[0] == node.name and node.get_child(0).get("En_Passant") == true:
 		for i in Special_Area:
 			if i == node.name:
 				var pawn = get_node("Flow/" + Selected_Node).get_child(0)
@@ -43,24 +45,29 @@ func _on_flow_send_location(location: String):
 				pawn.reparent(get_node("Flow/" + Special_Area[1]))
 				pawn.position = pos
 				Update_Game(pawn.get_parent())
-	elif Selected_Node != "" && node.get_child_count() != 0 && node.get_child(0).Item_Color == Turn:
-		# Re-select
+	elif Selected_Node != "" and node.get_child_count() != 0 and node.get_child(0).Item_Color == Turn:
+		# Re-selección
 		Selected_Node = location
 		Get_Moveable_Areas()
-	elif Selected_Node != "" && node.get_child_count() != 0 && node.get_child(0).Item_Color != Turn:
-		# Taking over a piece
+	elif Selected_Node != "" and node.get_child_count() != 0 and node.get_child(0).Item_Color != Turn:
+		# Captura de pieza
 		for i in Areas:
 			if i == node.name:
 				var Piece = get_node("Flow/" + Selected_Node).get_child(0)
-				# Win conditions
+				# Condiciones de victoria
 				if node.get_child(0).name == "King":
-					print("Damn, you win!")
-				node.get_child(0).free()
+					print("¡Victoria!")
+				
+				# Almacenar la ficha capturada
+				var captured_piece = node.get_child(0)
+				store_captured_piece(captured_piece)
+				
+				captured_piece.free()
 				Piece.reparent(node)
 				Piece.position = pos
 				Update_Game(node)
-	elif Selected_Node != "" && node.get_child_count() == 0:
-		# Moving a piece
+	elif Selected_Node != "" and node.get_child_count() == 0:
+		# Mover pieza
 		for i in Areas:
 			if i == node.name:
 				var Piece = get_node("Flow/" + Selected_Node).get_child(0)
@@ -71,14 +78,58 @@ func _on_flow_send_location(location: String):
 
 @warning_ignore("unused_parameter")
 func Update_Game(node):
-	# Restablecer el nodo seleccionado
 	Selected_Node = ""
-	# Cambiar el turno
 	Turn = (Turn + 1) % 2
-	# Limpiar la visualización de áreas
-	Clear_Areas(get_node("Flow"))  # Llama a la función para limpiar completamente las áreas
-	Areas.clear()  # Limpiar las áreas movibles
-	Special_Area.clear()  # Limpiar áreas especiales si existen
+	Clear_Areas(get_node("Flow"))
+	Areas.clear()
+	Special_Area.clear()
+
+func store_captured_piece(captured_piece):
+	# Crear una copia profunda de la pieza capturada
+	var duplicated_piece = captured_piece.duplicate(true)
+	duplicated_piece.set_position(Vector2.ZERO)  # Asegúrate de que la posición sea coherente para el contenedor
+
+	# Añadir la ficha capturada a la lista correspondiente
+	if captured_piece.Item_Color == 0:  # Pieza blanca
+		captured_white_pieces.append(duplicated_piece)
+	else:  # Pieza negra
+		captured_black_pieces.append(duplicated_piece)
+
+	# Liberar la pieza original del tablero
+	captured_piece.queue_free()
+
+	# Actualizar visualización de piezas capturadas
+	update_captured_display()
+
+
+func update_captured_display():
+	var white_container = get_node("CapturedWhite")
+	var black_container = get_node("CapturedBlack")
+
+	if white_container == null or black_container == null:
+		print("Error: No se encontraron los contenedores de piezas capturadas.")
+		return
+
+	# Limpia los contenedores eliminando a todos sus hijos
+	for child in white_container.get_children():
+		child.queue_free()
+
+	for child in black_container.get_children():
+		child.queue_free()
+
+	# Agrega las piezas capturadas actuales a los contenedores
+	for piece in captured_white_pieces:
+		var new_piece = piece.duplicate(true)  
+		white_container.add_child(new_piece)
+
+	for piece in captured_black_pieces:
+		var new_piece = piece.duplicate(true)  
+		black_container.add_child(new_piece)
+
+
+# Implementa tus otras funciones como Get_Moveable_Areas, Get_Pawn, etc.
+
+
 
 func Get_Moveable_Areas():
 	var Flow = get_node("Flow")
@@ -117,25 +168,23 @@ func Highlight_Areas(Flow):
 	for area in Areas:
 		var square = Flow.get_node(area)
 		if square:
-			# Solo permite resaltar si está vacío o tiene una ficha enemiga
 			if square.get_child_count() == 0 or (square.get_child_count() == 1 and square.get_child(0).Item_Color != Turn):
-				square.modulate = Color(0, 1, 0)  # Cambiar a verde (o cualquier color que desees)
+				square.modulate = Color(0, 1, 0)  # Verde
 
-
-	# No permitir que las áreas donde ya hay fichas aliadas aparezcan
-	var new_areas = PackedStringArray()  # Crear un nuevo array
-
+	var new_areas = PackedStringArray()
 	for area in Areas:
-		var can_add = true  # Suponemos que podemos agregar el área
+		var can_add = true
 		for child in Flow.get_children():
 			if child.get_child_count() != 0 and child.get_child(0).Item_Color == Turn:
 				if child.name == area:
-					can_add = false  # No agregamos el área si hay ficha aliada
+					can_add = false
 					break
 		if can_add:
-			new_areas.append(area)  # Solo agregamos si no hay ficha aliada
+			new_areas.append(area)
 
-	Areas = new_areas  # Reemplazamos Areas con el nuevo array
+	Areas = new_areas
+
+# Implementa tus otras funciones como Get_Pawn, Get_Diagonals, Get_Rows, etc.
 
 
 
