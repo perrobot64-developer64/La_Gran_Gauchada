@@ -17,6 +17,7 @@ func _on_flow_send_location(location: String):
 	Location_X = ""
 	var node = get_node("Flow/" + location)
 	
+	# Procesar coordenadas X e Y
 	while location.substr(number, 1) != "-":
 		Location_X += location.substr(number, 1)
 		number += 1
@@ -185,50 +186,46 @@ func Highlight_Areas(Flow):
 
 # Implementa tus otras funciones como Get_Pawn, Get_Diagonals, Get_Rows, etc.
 
-
-
-
-
 func Get_Pawn(Piece, Flow):
-	# This is for going from the bottom to the top, also known as the white pawns.
-	if Piece.Item_Color == 0:
-		if not Is_Null(Location_X + "-" + str(int(Location_Y) - 1)) && Flow.get_node(Location_X + "-" + str(int(Location_Y) - 1)).get_child_count() == 0:
+	# Movimiento de los peones blancos (de abajo hacia arriba)
+	if Piece.Item_Color == 0:  # Pieza blanca
+		# Verifica si la casilla de enfrente está vacía para permitir el movimiento
+		if not Is_Null(Location_X + "-" + str(int(Location_Y) - 1)) and Flow.get_node(Location_X + "-" + str(int(Location_Y) - 1)).get_child_count() == 0:
 			Areas.append(Location_X + "-" + str(int(Location_Y) - 1))
-		if not Is_Null(Location_X + "-" + str(int(Location_Y) - 2)) && Piece.Double_Start == true && Flow.get_node(Location_X + "-" + str(int(Location_Y) - 2)).get_child_count() == 0:
-			Areas.append(Location_X + "-" + str(int(Location_Y) - 2))
-		# Attacking squares
-		if not Is_Null(str(int(Location_X) - 1) + "-" + str(int(Location_Y) - 1)) && Flow.get_node(str(int(Location_X) - 1) + "-" + str(int(Location_Y) - 1)).get_child_count() == 1:
+		
+		# Si es el primer movimiento del peón (Double_Start) permite dos casillas
+		if Piece.Double_Start == true and (int(Location_Y) == 6):  # Verifica si está en su posición inicial
+			if not Is_Null(Location_X + "-" + str(int(Location_Y) - 2)) and Flow.get_node(Location_X + "-" + str(int(Location_Y) - 2)).get_child_count() == 0:
+				Areas.append(Location_X + "-" + str(int(Location_Y) - 2))
+			
+			# Después de realizar el primer movimiento de dos casillas, desactivamos el doble movimiento
+			Piece.Double_Start = false
+
+		# Casillas de ataque en diagonal
+		if not Is_Null(str(int(Location_X) - 1) + "-" + str(int(Location_Y) - 1)) and Flow.get_node(str(int(Location_X) - 1) + "-" + str(int(Location_Y) - 1)).get_child_count() == 1:
 			Areas.append(str(int(Location_X) - 1) + "-" + str(int(Location_Y) - 1))
-		if not Is_Null(str(int(Location_X) + 1) + "-" + str(int(Location_Y) - 1)) && Flow.get_node(str(int(Location_X) + 1) + "-" + str(int(Location_Y) - 1)).get_child_count() == 1:
+		if not Is_Null(str(int(Location_X) + 1) + "-" + str(int(Location_Y) - 1)) and Flow.get_node(str(int(Location_X) + 1) + "-" + str(int(Location_Y) - 1)).get_child_count() == 1:
 			Areas.append(str(int(Location_X) + 1) + "-" + str(int(Location_Y) - 1))
-		# En passant
-		if not Is_Null(str(int(Location_X) - 1) + "-" + Location_Y) && not Is_Null(str(int(Location_X) - 1) + "-" + str(int(Location_Y) - 1)):
-			if Flow.get_node(str(int(Location_X) - 1) + "-" + Location_Y).get_child_count() == 1 && Flow.get_node(str(int(Location_X) - 1) + "-" + str(int(Location_Y) - 1)).get_child_count() != 1:
-				Special_Area.append(str(int(Location_X) - 1) + "-" + Location_Y)
-				Special_Area.append(str(int(Location_X) - 1) + "-" + str(int(Location_Y) - 1))
-		if not Is_Null(str(int(Location_X) + 1) + "-" + Location_Y) && not Is_Null(str(int(Location_X) + 1) + "-" + str(int(Location_Y) - 1)):
-			if Flow.get_node(str(int(Location_X) + 1) + "-" + Location_Y).get_child_count() == 1 && Flow.get_node(str(int(Location_X) + 1) + "-" + str(int(Location_Y) - 1)).get_child_count() != 1:
-				Special_Area.append(str(int(Location_X) + 1) + "-" + Location_Y)
-				Special_Area.append(str(int(Location_X) + 1) + "-" + str(int(Location_Y) - 1))
-	# Black pawns
-	else:
-		if not Is_Null(Location_X + "-" + str(int(Location_Y) + 1)) && Flow.get_node(Location_X + "-" + str(int(Location_Y) + 1)).get_child_count() == 0:
+
+	# Movimiento de los peones negros (de arriba hacia abajo)
+	else:  # Pieza negra
+		if not Is_Null(Location_X + "-" + str(int(Location_Y) + 1)) and Flow.get_node(Location_X + "-" + str(int(Location_Y) + 1)).get_child_count() == 0:
 			Areas.append(Location_X + "-" + str(int(Location_Y) + 1))
-		if not Is_Null(Location_X + "-" + str(int(Location_Y) + 2)) && Piece.Double_Start == true && Flow.get_node(Location_X + "-" + str(int(Location_Y) + 2)).get_child_count() == 0:
-			Areas.append(Location_X + "-" + str(int(Location_Y) + 2))
-		# Attacking squares
-		if not Is_Null(str(int(Location_X) - 1) + "-" + str(int(Location_Y) + 1)) && Flow.get_node(str(int(Location_X) - 1) + "-" + str(int(Location_Y) + 1)).get_child_count() == 1:
+		
+		# Si es el primer movimiento del peón (Double_Start) permite dos casillas
+		if Piece.Double_Start == true and (int(Location_Y) == 1):  # Verifica si está en su posición inicial
+			if not Is_Null(Location_X + "-" + str(int(Location_Y) + 2)) and Flow.get_node(Location_X + "-" + str(int(Location_Y) + 2)).get_child_count() == 0:
+				Areas.append(Location_X + "-" + str(int(Location_Y) + 2))
+			
+			# Después de realizar el primer movimiento de dos casillas, desactivamos el doble movimiento
+			Piece.Double_Start = false
+
+		# Casillas de ataque en diagonal
+		if not Is_Null(str(int(Location_X) - 1) + "-" + str(int(Location_Y) + 1)) and Flow.get_node(str(int(Location_X) - 1) + "-" + str(int(Location_Y) + 1)).get_child_count() == 1:
 			Areas.append(str(int(Location_X) - 1) + "-" + str(int(Location_Y) + 1))
-		if not Is_Null(str(int(Location_X) + 1) + "-" + str(int(Location_Y) + 1)) && Flow.get_node(str(int(Location_X) + 1) + "-" + str(int(Location_Y) + 1)).get_child_count() == 1:
+		if not Is_Null(str(int(Location_X) + 1) + "-" + str(int(Location_Y) + 1)) and Flow.get_node(str(int(Location_X) + 1) + "-" + str(int(Location_Y) + 1)).get_child_count() == 1:
 			Areas.append(str(int(Location_X) + 1) + "-" + str(int(Location_Y) + 1))
-		if not Is_Null(str(int(Location_X) - 1) + "-" + Location_Y) && not Is_Null(str(int(Location_X) - 1) + "-" + str(int(Location_Y) + 1)):
-			if Flow.get_node(str(int(Location_X) - 1) + "-" + Location_Y).get_child_count() == 1 && Flow.get_node(str(int(Location_X) - 1) + "-" + str(int(Location_Y) + 1)).get_child_count() != 1:
-				Special_Area.append(str(int(Location_X) - 1) + "-" + Location_Y)
-				Special_Area.append(str(int(Location_X) - 1) + "-" + str(int(Location_Y) + 1))
-		if not Is_Null(str(int(Location_X) + 1) + "-" + Location_Y) && not Is_Null(str(int(Location_X) + 1) + "-" + str(int(Location_Y) + 1)):
-			if Flow.get_node(str(int(Location_X) + 1) + "-" + Location_Y).get_child_count() == 1 && Flow.get_node(str(int(Location_X) + 1) + "-" + str(int(Location_Y) + 1)).get_child_count() != 1:
-				Special_Area.append(str(int(Location_X) + 1) + "-" + Location_Y)
-				Special_Area.append(str(int(Location_X) + 1) + "-" + str(int(Location_Y) + 1))
+
 
 func Get_Around(Piece):
 	# Single Rows
