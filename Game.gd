@@ -187,6 +187,7 @@ func Highlight_Areas(Flow):
 # Implementa tus otras funciones como Get_Pawn, Get_Diagonals, Get_Rows, etc.
 
 func Get_Pawn(Piece, Flow):
+	$AnimationPlayer_cha_b.play("peon")
 	# Movimiento de los peones blancos (de abajo hacia arriba)
 	if Piece.Item_Color == 0:  # Pieza blanca
 		# Verifica si la casilla de enfrente está vacía para permitir el movimiento
@@ -227,7 +228,8 @@ func Get_Pawn(Piece, Flow):
 			Areas.append(str(int(Location_X) + 1) + "-" + str(int(Location_Y) + 1))
 
 
-func Get_Around(Piece):
+func Get_Around(Piece):#reyna
+	$AnimationPlayer_cha_b.play("reyna")
 	# Single Rows
 	if not Is_Null(Location_X + "-" + str(int(Location_Y) + 1)):
 		Areas.append(Location_X + "-" + str(int(Location_Y) + 1))
@@ -250,7 +252,8 @@ func Get_Around(Piece):
 	if Piece.Castling == true:
 		Castle()
 
-func Get_Rows(Flow):
+func Get_Rows(Flow):#rey
+	$AnimationPlayer_cha_b.play("rey")
 	var Add_X = 1
 	# Getting the horizontal rows first.
 	while not Is_Null(str(int(Location_X) + Add_X) + "-" + Location_Y):
@@ -279,6 +282,7 @@ func Get_Rows(Flow):
 		Add_Y += 1
 	
 func Get_Diagonals(Flow):
+	$AnimationPlayer_cha_b.play("alfil")
 	var Add_X = 1
 	var Add_Y = 1
 	while not Is_Null(str(int(Location_X) + Add_X) + "-" + str(int(Location_Y) + Add_Y)):
@@ -313,6 +317,7 @@ func Get_Diagonals(Flow):
 		Add_Y += 1
 
 func Get_Horse():
+	$AnimationPlayer_cha_b.play("caballo")
 	var The_X = 2
 	var The_Y = 1
 	var number = 0
@@ -373,4 +378,4 @@ func Is_Null(Location):
 	if get_node_or_null("Flow/" + Location) == null:
 		return true
 	else:
-		return false
+		return false 
