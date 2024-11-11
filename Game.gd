@@ -113,23 +113,22 @@ func update_captured_display():
 	# Limpia los contenedores eliminando a todos sus hijos
 	for child in white_container.get_children():
 		child.queue_free()
-
 	for child in black_container.get_children():
 		child.queue_free()
 
-	# Agrega las piezas capturadas actuales a los contenedores
-	for piece in captured_white_pieces:
-		var new_piece = piece.duplicate(true)  
+	# Define la distancia entre las fichas en la fila
+	var spacing = 30
+
+	# Agrega las piezas capturadas actuales a los contenedores en fila
+	for i in range(captured_white_pieces.size()):
+		var new_piece = captured_white_pieces[i].duplicate(true)
+		new_piece.position = Vector2(i * spacing, 0)  # Posiciona en fila
 		white_container.add_child(new_piece)
 
-	for piece in captured_black_pieces:
-		var new_piece = piece.duplicate(true)  
+	for i in range(captured_black_pieces.size()):
+		var new_piece = captured_black_pieces[i].duplicate(true)
+		new_piece.position = Vector2(i * spacing, 0)  # Posiciona en fila
 		black_container.add_child(new_piece)
-
-
-# Implementa tus otras funciones como Get_Moveable_Areas, Get_Pawn, etc.
-
-
 
 func Get_Moveable_Areas():
 	var Flow = get_node("Flow")
