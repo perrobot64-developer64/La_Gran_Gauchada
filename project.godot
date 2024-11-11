@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="La_Gran_Gauchada"
-run/main_scene="res://board.tscn"
+run/main_scene="res://addons/Art/board.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -43,4 +43,5 @@ ui_fullscreen={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=3
 renderer/rendering_method="gl_compatibility"

@@ -1,0 +1,303 @@
+[gd_scene load_steps=16 format=3 uid="uid://d0qyk6v20uief"]
+
+[ext_resource type="Script" path="res://Game.gd" id="1_1phjy"]
+[ext_resource type="Script" path="res://Generator.gd" id="2_jnbgx"]
+[ext_resource type="PackedScene" uid="uid://dafpcgd6mnodq" path="res://addons/Art/BG.tscn" id="3_hay74"]
+[ext_resource type="Texture2D" uid="uid://bahk2l1k134ek" path="res://addons/Art/characte/gaucho_b.png" id="4_63870"]
+[ext_resource type="Texture2D" uid="uid://dvar6d2jpowaw" path="res://addons/Art/characte/peon_b.png" id="5_ftuof"]
+[ext_resource type="Texture2D" uid="uid://cbycecyd12wgv" path="res://addons/Art/characte/alfil_b.png" id="5_n54s7"]
+[ext_resource type="Texture2D" uid="uid://ds3nnqunhkksl" path="res://addons/Art/characte/reyna_b.png" id="6_scs8c"]
+[ext_resource type="Texture2D" uid="uid://ccmg1b8fvkdtn" path="res://addons/Art/characte/torre_b.png" id="7_7kj3w"]
+[ext_resource type="Texture2D" uid="uid://hid53lutj68a" path="res://addons/Art/characte/caballo_b.png" id="8_jro4h"]
+
+[sub_resource type="Animation" id="Animation_lgekr"]
+resource_name = "alfil"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer_cha_b/alfil:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1205, 471), Vector2(1181, 471)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer_cha_b/alfil:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_j2jpi"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer_cha_b/alfil:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1205, 471)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer_cha_b/alfil:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimationPlayer_cha_b/rey:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1136, 554)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AnimationPlayer_cha_b/rey:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("AnimationPlayer_cha_b/reyna:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1111, 491)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("AnimationPlayer_cha_b/reyna:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("AnimationPlayer_cha_b/caballo:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1129, 497)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("AnimationPlayer_cha_b/caballo:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_5dewb"]
+resource_name = "rey"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer_cha_b/rey:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1136, 554), Vector2(1120, 554)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer_cha_b/rey:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5gp8i"]
+resource_name = "reyna"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer_cha_b/reyna:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1111, 491), Vector2(1087, 491)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer_cha_b/reyna:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_tr27y"]
+resource_name = "caballo"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer_cha_b/caballo:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1129, 497), Vector2(1105, 497)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer_cha_b/caballo:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u0lw1"]
+_data = {
+"RESET": SubResource("Animation_j2jpi"),
+"alfil": SubResource("Animation_lgekr"),
+"caballo": SubResource("Animation_tr27y"),
+"rey": SubResource("Animation_5dewb"),
+"reyna": SubResource("Animation_5gp8i")
+}
+
+[node name="Board" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 432.0
+offset_top = 146.0
+offset_right = 432.0
+offset_bottom = 146.0
+script = ExtResource("1_1phjy")
+
+[node name="BG" parent="." instance=ExtResource("3_hay74")]
+
+[node name="AnimationPlayer_cha_b" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_u0lw1")
+}
+
+[node name="rey" type="Sprite2D" parent="AnimationPlayer_cha_b"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+position = Vector2(1136, 554)
+scale = Vector2(1.15179, 1.15179)
+texture = ExtResource("4_63870")
+
+[node name="alfil" type="Sprite2D" parent="AnimationPlayer_cha_b"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+z_index = -1
+position = Vector2(1205, 471)
+scale = Vector2(1.02296, 1.02296)
+texture = ExtResource("5_n54s7")
+
+[node name="peon" type="Sprite2D" parent="AnimationPlayer_cha_b"]
+visible = false
+z_index = -1
+position = Vector2(1143, 532)
+scale = Vector2(1.08801, 1.08801)
+texture = ExtResource("5_ftuof")
+
+[node name="reyna" type="Sprite2D" parent="AnimationPlayer_cha_b"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+position = Vector2(1111, 491)
+texture = ExtResource("6_scs8c")
+
+[node name="torre" type="Sprite2D" parent="AnimationPlayer_cha_b"]
+visible = false
+z_index = -1
+position = Vector2(1100, 411)
+texture = ExtResource("7_7kj3w")
+
+[node name="caballo" type="Sprite2D" parent="AnimationPlayer_cha_b"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(1129, 497)
+scale = Vector2(1.17579, 1.17579)
+texture = ExtResource("8_jro4h")
+
+[node name="Flow" type="FlowContainer" parent="."]
+layout_mode = 0
+script = ExtResource("2_jnbgx")
+
+[node name="CapturedWhite" type="Control" parent="."]
+anchors_preset = 0
+offset_left = -332.0
+offset_top = -17.0
+offset_right = -292.0
+offset_bottom = 23.0
+
+[node name="CapturedBlack" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 519.0
+offset_top = -20.0
+offset_right = 559.0
+offset_bottom = 20.0
+
+[connection signal="send_location" from="Flow" to="." method="_on_flow_send_location"]
