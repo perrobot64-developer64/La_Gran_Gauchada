@@ -169,7 +169,7 @@ func Highlight_Areas(Flow):
 		var square = Flow.get_node(area)
 		if square:
 			if square.get_child_count() == 0 or (square.get_child_count() == 1 and square.get_child(0).Item_Color != Turn):
-				square.modulate = Color(0, 1, 0)  # Verde
+				square.modulate = Color(0, 1, 1)  # Verde
 
 	var new_areas = PackedStringArray()
 	for area in Areas:
