@@ -8,11 +8,22 @@ var pos = Vector2(25, 25)
 var Areas: PackedStringArray
 var Special_Area: PackedStringArray
 
+@onready var tiempo_label = $TiempoLabel
+@onready var timer = $Timer  # Asegúrate de que el temporizador está configurado en el editor
+# Temporizador
+var timer_start_time: float = 0.0
+var timer_running: bool = false
+
 # Nuevas variables para almacenar las fichas capturadas
 var captured_white_pieces = []  # Lista de fichas blancas capturadas
 var captured_black_pieces = []  # Lista de fichas negras capturadas
 
+var partida_duracion = 0
+var partida_activa = false
+
 func _on_flow_send_location(location: String):
+	
+	
 	var number = 0
 	Location_X = ""
 	var node = get_node("Flow/" + location)
@@ -58,7 +69,7 @@ func _on_flow_send_location(location: String):
 				# Condiciones de victoria
 				if node.get_child(0).name == "King":
 					print("¡Victoria!")
-				
+					stop_timer()
 				# Almacenar la ficha capturada
 				var captured_piece = node.get_child(0)
 				store_captured_piece(captured_piece)
@@ -75,6 +86,12 @@ func _on_flow_send_location(location: String):
 				Piece.reparent(node)
 				Piece.position = pos
 				Update_Game(node)
+				on_piece_moved()
+	if not partida_activa:
+		pass
+
+	#if partida_activa:
+		#detener_partida()
 
 
 @warning_ignore("unused_parameter")
@@ -379,3 +396,46 @@ func Is_Null(Location):
 		return true
 	else:
 		return false 
+
+func _ready():
+	# Inicialización
+	timer_start_time = 0.0
+	timer_running = false
+
+# Esta función se llama cuando se mueve una ficha
+func on_piece_moved():
+	if not timer_running:
+		start_timer()
+
+# Inicia el temporizador
+func start_timer():
+	timer_start_time = Time.get_ticks_msec() / 1000.0  # Tiempo actual en segundos
+	timer_running = true
+	print("El temporizador ha comenzado.")
+
+# Obtiene el tiempo transcurrido
+func get_elapsed_time() -> float:
+	if timer_running:
+		return Time.get_ticks_msec() / 1000.0 - timer_start_time
+	return 0.0
+
+# Se ejecuta en cada cuadro para actualizar el tiempo
+@warning_ignore("unused_parameter")
+func _process(delta: float) -> void:
+	if timer_running:
+		actualizar_tiempo_label()
+
+# Actualiza el label con la duración actual de la partida en formato de minutos y segundos
+func actualizar_tiempo_label():
+	@warning_ignore("shadowed_variable")
+	var partida_duracion = get_elapsed_time()
+	@warning_ignore("integer_division")
+	var minutos = int(partida_duracion) / 60
+	var segundos = int(partida_duracion) % 60
+	tiempo_label.text = str(minutos) + ":" + str(segundos).pad_zeros(2)
+	
+# Detiene el temporizador
+func stop_timer():
+	if timer_running:
+		timer_running = false
+		print("El temporizador se ha detenido. Tiempo total: ", get_elapsed_time(), " segundos.")

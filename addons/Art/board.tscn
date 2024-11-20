@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://d0qyk6v20uief"]
+[gd_scene load_steps=23 format=3 uid="uid://d0qyk6v20uief"]
 
 [ext_resource type="Script" path="res://Game.gd" id="1_1phjy"]
 [ext_resource type="Script" path="res://Generator.gd" id="2_jnbgx"]
@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://bqwr45ia3lgcs" path="res://addons/Art/NEG.png" id="10_8ttw4"]
 [ext_resource type="Texture2D" uid="uid://qrmyfoafd5ra" path="res://addons/Art/tablero.png" id="10_a8t5u"]
 [ext_resource type="Texture2D" uid="uid://ba7fa637rfxx1" path="res://addons/Art/BLAN.png" id="11_utu1w"]
+[ext_resource type="FontFile" uid="uid://bhoh4iluldiw2" path="res://addons/Art/font/GrapeSoda.ttf" id="13_r3dvv"]
+[ext_resource type="Texture2D" uid="uid://du3egujr4tvnx" path="res://addons/Art/timerpng.png" id="14_jr0r8"]
 
 [sub_resource type="Animation" id="Animation_j2jpi"]
 length = 0.001
@@ -786,5 +788,30 @@ texture = ExtResource("10_8ttw4")
 position = Vector2(661.25, -104)
 scale = Vector2(0.65625, 0.65625)
 texture = ExtResource("11_utu1w")
+
+[node name="TiempoLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 171.0
+offset_top = -148.0
+offset_right = 444.0
+offset_bottom = -92.0
+theme_override_fonts/font = ExtResource("13_r3dvv")
+theme_override_font_sizes/font_size = 46
+text = "0:00"
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="timer" type="Sprite2D" parent="."]
+z_index = -1
+position = Vector2(206, -123)
+scale = Vector2(0.735294, 0.735294)
+texture = ExtResource("14_jr0r8")
+
+[node name="timer2" type="Sprite2D" parent="timer"]
+modulate = Color(0, 0, 0, 1)
+self_modulate = Color(1, 1, 1, 0.313726)
+z_index = -1
+position = Vector2(8.15997, 10.88)
+texture = ExtResource("14_jr0r8")
 
 [connection signal="send_location" from="Flow" to="." method="_on_flow_send_location"]
