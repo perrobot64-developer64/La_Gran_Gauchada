@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://d0qyk6v20uief"]
+[gd_scene load_steps=36 format=3 uid="uid://d0qyk6v20uief"]
 
 [ext_resource type="Script" path="res://Game.gd" id="1_1phjy"]
 [ext_resource type="Script" path="res://Generator.gd" id="2_jnbgx"]
@@ -14,6 +14,9 @@
 [ext_resource type="Texture2D" uid="uid://ba7fa637rfxx1" path="res://addons/Art/BLAN.png" id="11_utu1w"]
 [ext_resource type="FontFile" uid="uid://bhoh4iluldiw2" path="res://addons/Art/font/GrapeSoda.ttf" id="13_r3dvv"]
 [ext_resource type="Texture2D" uid="uid://du3egujr4tvnx" path="res://addons/Art/timerpng.png" id="14_jr0r8"]
+[ext_resource type="Texture2D" uid="uid://bca08htco81j0" path="res://addons/Art/turnoN.png" id="15_psqcl"]
+[ext_resource type="Texture2D" uid="uid://bteqnc1k6s4pm" path="res://addons/Art/turnoB.png" id="16_ykukn"]
+[ext_resource type="Texture2D" uid="uid://jqdg4cisa7ia" path="res://addons/Art/win.png" id="17_nbmrs"]
 
 [sub_resource type="Animation" id="Animation_j2jpi"]
 length = 0.001
@@ -695,6 +698,166 @@ _data = {
 "torre": SubResource("Animation_brqqb")
 }
 
+[sub_resource type="Animation" id="Animation_5vkt2"]
+resource_name = "turno"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.816326, 0.416667), Vector2(0.583333, 0.583333)]
+}
+
+[sub_resource type="Animation" id="Animation_5lxmf"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.583333, 0.583333)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_paawk"]
+_data = {
+"RESET": SubResource("Animation_5lxmf"),
+"turno": SubResource("Animation_5vkt2")
+}
+
+[sub_resource type="Animation" id="Animation_20c20"]
+resource_name = "turno"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.760204, 0.416667), Vector2(0.583, 0.583)]
+}
+
+[sub_resource type="Animation" id="Animation_5md2t"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.583, 0.583)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_myrdd"]
+_data = {
+"RESET": SubResource("Animation_5md2t"),
+"turno": SubResource("Animation_20c20")
+}
+
+[sub_resource type="Animation" id="Animation_w346v"]
+resource_name = "win negras"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.02813, 0.648438), Vector2(0.828125, 0.828125)]
+}
+
+[sub_resource type="Animation" id="Animation_gycew"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.828125, 0.828125)]
+}
+
+[sub_resource type="Animation" id="Animation_b0h7d"]
+resource_name = "win blancas"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.00156, 0.613281), Vector2(0.828125, 0.828125)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kw2cd"]
+_data = {
+"RESET": SubResource("Animation_gycew"),
+"win blancas": SubResource("Animation_b0h7d"),
+"win negras": SubResource("Animation_w346v")
+}
+
 [node name="Board" type="Control"]
 layout_mode = 3
 anchors_preset = 0
@@ -760,6 +923,7 @@ scale = Vector2(1.17579, 1.17579)
 texture = ExtResource("8_jro4h")
 
 [node name="BG" parent="." instance=ExtResource("3_hay74")]
+position = Vector2(13, -4)
 
 [node name="Flow" type="FlowContainer" parent="."]
 layout_mode = 0
@@ -813,5 +977,38 @@ self_modulate = Color(1, 1, 1, 0.313726)
 z_index = -1
 position = Vector2(8.15997, 10.88)
 texture = ExtResource("14_jr0r8")
+
+[node name="Blancas" type="Sprite2D" parent="."]
+position = Vector2(643, -68)
+scale = Vector2(0.583333, 0.583333)
+texture = ExtResource("15_psqcl")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blancas"]
+libraries = {
+"": SubResource("AnimationLibrary_paawk")
+}
+autoplay = "turno"
+
+[node name="Negras" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-250.5, -60)
+scale = Vector2(0.583, 0.583)
+texture = ExtResource("16_ykukn")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Negras"]
+libraries = {
+"": SubResource("AnimationLibrary_myrdd")
+}
+
+[node name="win" type="Sprite2D" parent="."]
+position = Vector2(214.5, -48.5)
+scale = Vector2(0.828125, 0.828125)
+texture = ExtResource("17_nbmrs")
+hframes = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="win"]
+libraries = {
+"": SubResource("AnimationLibrary_kw2cd")
+}
 
 [connection signal="send_location" from="Flow" to="." method="_on_flow_send_location"]

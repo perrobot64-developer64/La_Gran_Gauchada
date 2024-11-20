@@ -8,6 +8,10 @@ var pos = Vector2(25, 25)
 var Areas: PackedStringArray
 var Special_Area: PackedStringArray
 
+var Start_Y = -1  # Valor inicial de Start_Y
+var Item_Color = 0  # 0 para piezas blancas, 1 para piezas negras
+var Double_Start = true  # Indicador de si se permite el movimiento de dos casillas
+
 @onready var tiempo_label = $TiempoLabel
 @onready var timer = $Timer  # Asegúrate de que el temporizador está configurado en el editor
 # Temporizador
@@ -17,13 +21,11 @@ var timer_running: bool = false
 # Nuevas variables para almacenar las fichas capturadas
 var captured_white_pieces = []  # Lista de fichas blancas capturadas
 var captured_black_pieces = []  # Lista de fichas negras capturadas
-
+var positions_history = []  # Para el historial de posiciones del tablero
 var partida_duracion = 0
 var partida_activa = false
 
 func _on_flow_send_location(location: String):
-	
-	
 	var number = 0
 	Location_X = ""
 	var node = get_node("Flow/" + location)
@@ -67,9 +69,19 @@ func _on_flow_send_location(location: String):
 			if i == node.name:
 				var Piece = get_node("Flow/" + Selected_Node).get_child(0)
 				# Condiciones de victoria
+# Verifica si el rey de las blancas o las negras ha sido capturado
 				if node.get_child(0).name == "King":
-					print("¡Victoria!")
+					# Verifica si es el rey de las blancas o de las negras
+					if node.get_child(0).get("color") == "blanco":  # Asumiendo que "color" es una propiedad del rey
+						print("¡Victoria! Las blancas han ganado.")
+						$win.visible = true
+						$win/AnimationPlayer.play("win negras")
+					else:
+						print("¡Victoria! Las negras han ganado.")
+						$win.visible = true
+						$win/AnimationPlayer.play("win blancas")
 					stop_timer()
+
 				# Almacenar la ficha capturada
 				var captured_piece = node.get_child(0)
 				store_captured_piece(captured_piece)
@@ -101,6 +113,7 @@ func Update_Game(node):
 	Clear_Areas(get_node("Flow"))
 	Areas.clear()
 	Special_Area.clear()
+	Update_Pieces_Visibility()
 
 func store_captured_piece(captured_piece):
 	# Crear una copia profunda de la pieza capturada
@@ -201,22 +214,22 @@ func Highlight_Areas(Flow):
 
 	Areas = new_areas
 
-# Implementa tus otras funciones como Get_Pawn, Get_Diagonals, Get_Rows, etc.
-
 func Get_Pawn(Piece, Flow):
 	$AnimationPlayer_cha_b.play("peon")
+
 	# Movimiento de los peones blancos (de abajo hacia arriba)
 	if Piece.Item_Color == 0:  # Pieza blanca
 		# Verifica si la casilla de enfrente está vacía para permitir el movimiento
 		if not Is_Null(Location_X + "-" + str(int(Location_Y) - 1)) and Flow.get_node(Location_X + "-" + str(int(Location_Y) - 1)).get_child_count() == 0:
 			Areas.append(Location_X + "-" + str(int(Location_Y) - 1))
 		
-		# Si es el primer movimiento del peón (Double_Start) permite dos casillas
-		if Piece.Double_Start == true and (int(Location_Y) == 6):  # Verifica si está en su posición inicial
+		# Si está en su posición inicial, permite mover dos casillas (Y = 6)
+		if int(Location_Y) == 6:
 			if not Is_Null(Location_X + "-" + str(int(Location_Y) - 2)) and Flow.get_node(Location_X + "-" + str(int(Location_Y) - 2)).get_child_count() == 0:
 				Areas.append(Location_X + "-" + str(int(Location_Y) - 2))
-			
-			# Después de realizar el primer movimiento de dos casillas, desactivamos el doble movimiento
+
+		# Si el peón ha llegado a la casilla Y = 4, desactivamos el movimiento doble
+		if int(Location_Y) <= 4:
 			Piece.Double_Start = false
 
 		# Casillas de ataque en diagonal
@@ -227,15 +240,17 @@ func Get_Pawn(Piece, Flow):
 
 	# Movimiento de los peones negros (de arriba hacia abajo)
 	else:  # Pieza negra
+		# Verifica si la casilla de enfrente está vacía para permitir el movimiento
 		if not Is_Null(Location_X + "-" + str(int(Location_Y) + 1)) and Flow.get_node(Location_X + "-" + str(int(Location_Y) + 1)).get_child_count() == 0:
 			Areas.append(Location_X + "-" + str(int(Location_Y) + 1))
 		
-		# Si es el primer movimiento del peón (Double_Start) permite dos casillas
-		if Piece.Double_Start == true and (int(Location_Y) == 1):  # Verifica si está en su posición inicial
+		# Si está en su posición inicial, permite mover dos casillas (Y = 1)
+		if int(Location_Y) == 1:
 			if not Is_Null(Location_X + "-" + str(int(Location_Y) + 2)) and Flow.get_node(Location_X + "-" + str(int(Location_Y) + 2)).get_child_count() == 0:
 				Areas.append(Location_X + "-" + str(int(Location_Y) + 2))
-			
-			# Después de realizar el primer movimiento de dos casillas, desactivamos el doble movimiento
+
+		# Si el peón ha llegado a la casilla Y = 4, desactivamos el movimiento doble
+		if int(Location_Y) >= 4:
 			Piece.Double_Start = false
 
 		# Casillas de ataque en diagonal
@@ -243,7 +258,6 @@ func Get_Pawn(Piece, Flow):
 			Areas.append(str(int(Location_X) - 1) + "-" + str(int(Location_Y) + 1))
 		if not Is_Null(str(int(Location_X) + 1) + "-" + str(int(Location_Y) + 1)) and Flow.get_node(str(int(Location_X) + 1) + "-" + str(int(Location_Y) + 1)).get_child_count() == 1:
 			Areas.append(str(int(Location_X) + 1) + "-" + str(int(Location_Y) + 1))
-
 
 func Get_Around(Piece):#reyna
 	$AnimationPlayer_cha_b.play("reyna")
@@ -398,6 +412,7 @@ func Is_Null(Location):
 		return false 
 
 func _ready():
+	$win.visible = false
 	# Inicialización
 	timer_start_time = 0.0
 	timer_running = false
@@ -439,3 +454,20 @@ func stop_timer():
 	if timer_running:
 		timer_running = false
 		print("El temporizador se ha detenido. Tiempo total: ", get_elapsed_time(), " segundos.")
+		
+
+func Update_Pieces_Visibility():
+	var Flow = get_node("Flow")
+	
+	# Iterar a través de todas las casillas en el tablero
+	for square in Flow.get_children():
+		if square.get_child_count() > 0:
+			var piece = square.get_child(0)
+			
+			# Comprobar si la pieza es blanca o negra y cambiar su visibilidad según el turno
+			if piece.Item_Color == 0:  # Pieza blanca
+				$Blancas.visible = (Turn == 0)  # Solo visible si es el turno de las blancas
+				$Blancas/AnimationPlayer.play("turno")
+			else:  # Pieza negra
+				$Negras.visible = (Turn == 1)  # Solo visible si es el turno de las negras
+				$Negras/AnimationPlayer.play("turno")
