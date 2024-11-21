@@ -76,20 +76,24 @@ func _on_flow_send_location(location: String):
 				# Condiciones de victoria
 # Verifica si el rey de las blancas o las negras ha sido capturado
 				if node.get_child(0).name == "King":
+					var king = node.get_child(0)
+					
 					# Verifica si es el rey de las blancas o de las negras
-					if node.get_child(0).get("color") == "blanco":  # Asumiendo que "color" es una propiedad del rey
+					if king.Item_Color == 1:  # Si el color es 1, es el rey blanco
 						print("¡Victoria! Las blancas han ganado.")
 						$win.visible = true
-						$win/AnimationPlayer.play("win negras")
+						$win/AnimationPlayer.play("win blancas")  # Suponiendo que 'win negras' es la animación para la victoria de las blancas
 						$Button.visible = true
 						game_over = true
-					else:
+					elif king.Item_Color == 0:  # Si el color es 0, es el rey negro
 						print("¡Victoria! Las negras han ganado.")
 						$win.visible = true
-						$win/AnimationPlayer.play("win blancas")
+						$win/AnimationPlayer.play("win negras")  # Suponiendo que 'win blancas' es la animación para la victoria de las negras
 						$Button.visible = true
 						game_over = true
+
 					stop_timer()
+
 
 				# Almacenar la ficha capturada
 				var captured_piece = node.get_child(0)
