@@ -11,6 +11,8 @@ var Special_Area: PackedStringArray
 var Start_Y = -1  # Valor inicial de Start_Y
 var Item_Color = 0  # 0 para piezas blancas, 1 para piezas negras
 var Double_Start = true  # Indicador de si se permite el movimiento de dos casillas
+var game_over = false
+
 
 @onready var tiempo_label = $TiempoLabel
 @onready var timer = $Timer  # Asegúrate de que el temporizador está configurado en el editor
@@ -26,6 +28,9 @@ var partida_duracion = 0
 var partida_activa = false
 
 func _on_flow_send_location(location: String):
+	if game_over:
+		return  # No permitir más movimientos si el juego terminó
+	
 	var number = 0
 	Location_X = ""
 	var node = get_node("Flow/" + location)
@@ -76,10 +81,14 @@ func _on_flow_send_location(location: String):
 						print("¡Victoria! Las blancas han ganado.")
 						$win.visible = true
 						$win/AnimationPlayer.play("win negras")
+						$Button.visible = true
+						game_over = true
 					else:
 						print("¡Victoria! Las negras han ganado.")
 						$win.visible = true
 						$win/AnimationPlayer.play("win blancas")
+						$Button.visible = true
+						game_over = true
 					stop_timer()
 
 				# Almacenar la ficha capturada
@@ -412,6 +421,7 @@ func Is_Null(Location):
 		return false 
 
 func _ready():
+	$Button.visible = false
 	$win.visible = false
 	# Inicialización
 	timer_start_time = 0.0
@@ -471,3 +481,8 @@ func Update_Pieces_Visibility():
 			else:  # Pieza negra
 				$Negras.visible = (Turn == 1)  # Solo visible si es el turno de las negras
 				$Negras/AnimationPlayer.play("turno")
+
+func _on_button_pressed() -> void:
+	get_tree().reload_current_scene()
+	print("reintentar")
+	pass # Replace with function body.
