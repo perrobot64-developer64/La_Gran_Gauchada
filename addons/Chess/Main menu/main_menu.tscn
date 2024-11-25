@@ -562,6 +562,7 @@ text = "SALIR
 "
 
 [node name="Label2" type="Label" parent="."]
+visible = false
 modulate = Color(0.260506, 0.260506, 0.260506, 1)
 z_index = 1
 offset_left = 8.0
