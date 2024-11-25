@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://d0qyk6v20uief"]
+[gd_scene load_steps=42 format=3 uid="uid://d0qyk6v20uief"]
 
 [ext_resource type="Script" path="res://Game.gd" id="1_1phjy"]
 [ext_resource type="Script" path="res://Generator.gd" id="2_jnbgx"]
@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://bteqnc1k6s4pm" path="res://addons/Art/turnoB.png" id="16_ykukn"]
 [ext_resource type="Texture2D" uid="uid://jqdg4cisa7ia" path="res://addons/Art/win.png" id="17_nbmrs"]
 [ext_resource type="Texture2D" uid="uid://bg83pwqtt5ong" path="res://addons/Art/nueva_partida.png" id="18_ka626"]
+[ext_resource type="Texture2D" uid="uid://c7hvnj3xbrlnb" path="res://addons/Art/Pixel_32.png" id="19_jap84"]
 
 [sub_resource type="Animation" id="Animation_j2jpi"]
 length = 0.001
@@ -859,6 +860,58 @@ _data = {
 "win negras": SubResource("Animation_w346v")
 }
 
+[sub_resource type="Animation" id="Animation_o1660"]
+resource_name = "in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.433333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_hnwkt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_wyy5a"]
+resource_name = "out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.433333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gd65w"]
+_data = {
+"RESET": SubResource("Animation_hnwkt"),
+"in": SubResource("Animation_o1660"),
+"out": SubResource("Animation_wyy5a")
+}
+
 [node name="Board" type="Control"]
 layout_mode = 3
 anchors_preset = 0
@@ -1027,5 +1080,30 @@ position = Vector2(72, -26)
 scale = Vector2(0.767857, 0.767857)
 texture = ExtResource("18_ka626")
 
+[node name="fade" type="AnimationPlayer" parent="."]
+root_node = NodePath("Sprite2D")
+libraries = {
+"": SubResource("AnimationLibrary_gd65w")
+}
+autoplay = "in"
+
+[node name="Sprite2D" type="Sprite2D" parent="fade"]
+modulate = Color(0, 0, 0, 1)
+z_index = 10
+position = Vector2(666.5, 389)
+scale = Vector2(42.6563, 25.3125)
+texture = ExtResource("19_jap84")
+
+[node name="atras" type="Button" parent="."]
+layout_mode = 0
+offset_left = -413.0
+offset_top = 506.0
+offset_right = -287.0
+offset_bottom = 558.0
+theme_override_fonts/font = ExtResource("13_r3dvv")
+theme_override_font_sizes/font_size = 44
+text = "ATRAS"
+
 [connection signal="send_location" from="Flow" to="." method="_on_flow_send_location"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="atras" to="." method="_on_atras_pressed"]

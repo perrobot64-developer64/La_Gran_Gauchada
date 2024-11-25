@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="La_Gran_Gauchada"
-run/main_scene="res://addons/Art/board.tscn"
+run/main_scene="res://addons/Chess/Main menu/main_menu.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
-config/icon="res://icon.svg"
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/image="res://addons/Chess/Main menu/rey-negro.png"
+boot_splash/fullsize=false
+boot_splash/use_filter=false
+config/icon="res://Chess.png"
 
 [autoload]
 

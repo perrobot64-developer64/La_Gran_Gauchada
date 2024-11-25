@@ -1,0 +1,99 @@
+[gd_scene load_steps=9 format=3 uid="uid://ctmuu6aqh5k5m"]
+
+[ext_resource type="PackedScene" uid="uid://dafpcgd6mnodq" path="res://addons/Art/BG.tscn" id="1_t6ejj"]
+[ext_resource type="Script" path="res://addons/Chess/Creditos/creditos.gd" id="1_vuagm"]
+[ext_resource type="Texture2D" uid="uid://c7hvnj3xbrlnb" path="res://addons/Art/Pixel_32.png" id="2_01254"]
+[ext_resource type="FontFile" uid="uid://bhoh4iluldiw2" path="res://addons/Art/font/GrapeSoda.ttf" id="3_tm2rx"]
+
+[sub_resource type="Animation" id="Animation_o1660"]
+resource_name = "in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.433333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_hnwkt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_wyy5a"]
+resource_name = "out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.433333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gd65w"]
+_data = {
+"RESET": SubResource("Animation_hnwkt"),
+"in": SubResource("Animation_o1660"),
+"out": SubResource("Animation_wyy5a")
+}
+
+[node name="Creditos" type="Node2D"]
+script = ExtResource("1_vuagm")
+
+[node name="BG" parent="." instance=ExtResource("1_t6ejj")]
+position = Vector2(578, 429)
+
+[node name="atras" type="Button" parent="."]
+offset_left = 25.0
+offset_top = 654.0
+offset_right = 151.0
+offset_bottom = 706.0
+theme_override_fonts/font = ExtResource("3_tm2rx")
+theme_override_font_sizes/font_size = 44
+text = "ATRAS"
+
+[node name="Label" type="Label" parent="."]
+offset_left = 26.0
+offset_top = 62.0
+offset_right = 658.0
+offset_bottom = 94.0
+theme_override_fonts/font = ExtResource("3_tm2rx")
+theme_override_font_sizes/font_size = 32
+text = "JUEGUITO DESARROLLADO POR ZARZA LUCIANO :)"
+
+[node name="fade" type="AnimationPlayer" parent="."]
+root_node = NodePath("Sprite2D")
+libraries = {
+"": SubResource("AnimationLibrary_gd65w")
+}
+autoplay = "in"
+
+[node name="Sprite2D" type="Sprite2D" parent="fade"]
+visible = false
+modulate = Color(0, 0, 0, 1)
+z_index = 10
+position = Vector2(666.5, 389)
+scale = Vector2(42.6563, 25.3125)
+texture = ExtResource("2_01254")
+
+[connection signal="pressed" from="atras" to="." method="_on_atras_pressed"]

@@ -13,7 +13,8 @@ var Item_Color = 0  # 0 para piezas blancas, 1 para piezas negras
 var Double_Start = true  # Indicador de si se permite el movimiento de dos casillas
 var game_over = false
 
-
+@onready var fade = $fade
+var next_scene = ""
 @onready var tiempo_label = $TiempoLabel
 @onready var timer = $Timer  # Asegúrate de que el temporizador está configurado en el editor
 # Temporizador
@@ -425,6 +426,8 @@ func Is_Null(Location):
 		return false 
 
 func _ready():
+	
+	$fade.connect("animation_finished", Callable(self, "_on_fade_finished"))
 	$Button.visible = false
 	$win.visible = false
 	# Inicialización
@@ -490,3 +493,18 @@ func _on_button_pressed() -> void:
 	get_tree().reload_current_scene()
 	print("reintentar")
 	pass # Replace with function body.
+
+
+func _on_atras_pressed() -> void:
+	next_scene = "res://addons/Chess/Main menu/main_menu.tscn"
+	$fade.play("out")
+	pass # Replace with function body.
+	
+
+func _on_fade_finished(anim_name: String) -> void:
+	# Verifica que la animación terminada sea 'fade_out'
+	if anim_name == "out":
+		if next_scene == "main_menu":
+			get_tree().quit()
+		else:
+			get_tree().change_scene_to_file(next_scene)
