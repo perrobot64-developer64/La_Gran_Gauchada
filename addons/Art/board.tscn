@@ -984,6 +984,7 @@ layout_mode = 0
 script = ExtResource("2_jnbgx")
 
 [node name="CapturedWhite" type="Control" parent="."]
+layout_mode = 3
 anchors_preset = 0
 offset_left = -388.0
 offset_top = -17.0
@@ -1088,6 +1089,7 @@ libraries = {
 autoplay = "in"
 
 [node name="Sprite2D" type="Sprite2D" parent="fade"]
+visible = false
 modulate = Color(0, 0, 0, 1)
 z_index = 10
 position = Vector2(666.5, 389)
