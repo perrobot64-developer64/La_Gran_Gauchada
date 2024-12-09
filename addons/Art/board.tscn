@@ -1089,7 +1089,6 @@ libraries = {
 autoplay = "in"
 
 [node name="Sprite2D" type="Sprite2D" parent="fade"]
-visible = false
 modulate = Color(0, 0, 0, 1)
 z_index = 10
 position = Vector2(666.5, 389)
@@ -1097,6 +1096,7 @@ scale = Vector2(42.6563, 25.3125)
 texture = ExtResource("19_jap84")
 
 [node name="atras" type="Button" parent="."]
+process_mode = 3
 layout_mode = 0
 offset_left = -413.0
 offset_top = 506.0
@@ -1106,6 +1106,19 @@ theme_override_fonts/font = ExtResource("13_r3dvv")
 theme_override_font_sizes/font_size = 44
 text = "ATRAS"
 
+[node name="PauseButton" type="Button" parent="."]
+process_mode = 3
+layout_mode = 0
+offset_left = -56.0
+offset_top = -124.0
+offset_right = 86.0
+offset_bottom = -88.0
+theme_override_fonts/font = ExtResource("13_r3dvv")
+theme_override_font_sizes/font_size = 23
+text = "Pausar
+"
+
 [connection signal="send_location" from="Flow" to="." method="_on_flow_send_location"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="atras" to="." method="_on_atras_pressed"]
+[connection signal="pressed" from="PauseButton" to="." method="_on_pause_button_pressed"]

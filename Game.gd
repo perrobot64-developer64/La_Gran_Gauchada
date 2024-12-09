@@ -13,6 +13,9 @@ var Item_Color = 0  # 0 para piezas blancas, 1 para piezas negras
 var Double_Start = true  # Indicador de si se permite el movimiento de dos casillas
 var game_over = false
 
+
+var timer_paused: bool = false  # Indica si el temporizador está pausado
+@onready var pause_button = $PauseButton  # Referencia al botón de pausa
 @onready var fade = $fade
 var next_scene = ""
 @onready var tiempo_label = $TiempoLabel
@@ -471,7 +474,9 @@ func stop_timer():
 	if timer_running:
 		timer_running = false
 		print("El temporizador se ha detenido. Tiempo total: ", get_elapsed_time(), " segundos.")
-		
+	timer.stop()
+	timer_paused = true
+	pause_button.disabled = true  # Desactiva el botón de pausa
 
 func Update_Pieces_Visibility():
 	var Flow = get_node("Flow")
@@ -501,6 +506,7 @@ func _on_atras_pressed() -> void:
 	pass # Replace with function body.
 	
 
+
 func _on_fade_finished(anim_name: String) -> void:
 	# Verifica que la animación terminada sea 'fade_out'
 	if anim_name == "out":
@@ -508,3 +514,25 @@ func _on_fade_finished(anim_name: String) -> void:
 			get_tree().quit()
 		else:
 			get_tree().change_scene_to_file(next_scene)
+
+func _on_pause_button_pressed():
+	if game_over:
+		return
+
+	timer_paused = not timer_paused
+	get_tree().paused = timer_paused  # Esto pausa todo el árbol de nodos excepto los nodos marcados como "Process in Pause".
+	if timer_paused:
+		print("Juego pausado")
+		pause_button.text = "Reanudar"  # Cambiar texto del botón
+	else:
+		pause_button.text = "Pausar"  # Cambiar texto del botón
+		print("Juego reanudado")
+		
+
+
+# Función para pausar o reanudar el juego
+func set_game_paused(paused: bool):
+	for child in get_node("Flow").get_children():
+		if child.get_child_count() > 0:
+			for piece in child.get_children():
+				piece.set_process(!paused)  # Pausar o reanudar el procesamiento de piezas
